@@ -1,4 +1,6 @@
 // Coding Challenge #1
+console.log("Coding Challenge #1");
+
 
 // Mark and John are trying to compare their BMI (Body Mass Index), which is 
 // calculated using the formula:
@@ -6,7 +8,6 @@
 // and height in meter).
 
 // DATA 1
-
 // 1. Store Mark's and John's mass and height in variables
 var massMark = 78
 var heightMark = 1.69
@@ -34,6 +35,7 @@ console.log(markHigherBMI)
 
 
 // Coding Challenge #2
+console.log("\n\nCoding Challenge #2");
 // Use the BMI example from Challenge #1, and the code you already wrote, and improve it.
 // Your tasks:
 // 1. Print a nice output to the console, saying who has the higher BMI. The message 
@@ -78,6 +80,7 @@ else
 //-------------------------------
 
 // Coding Challenge #3 
+console.log("\n\nCoding Challenge #3");
 // There are two gymnastics teams, Dolphins and Koalas. They compete against each 
 // other 3 times. The winner with the highest average score wins a trophy!
 
@@ -94,7 +97,7 @@ const avgDolphins = sumDolphins / teamDolphins.length;
 const sumKoalas = teamKoalas.reduce((partialSum, a) => partialSum + a, 0)
 const avgKoalas = sumKoalas / teamKoalas.length;
 
-console.log('\nDolphins Average Score:' + avgDolphins);
+console.log('Dolphins Average Score:' + avgDolphins);
 console.log('Koalas Average Score:' + avgKoalas);
 
 // 2. Compare the team's average scores to determine the winner of the competition, 
@@ -129,7 +132,7 @@ if (avgDolphins > avgKoalas && avgDolphins >= minScore) {
 
 //------------------------------
 // Coding Challenge #4
-
+console.log("\n\nCoding Challenge #4");
 // Steven wants to build a very simple tip calculator for whenever he goes eating in a 
 // restaurant. In his country, it's usual to tip 15% if the bill value is between 50 and 
 // 300. If the value is different, the tip is 20%.
