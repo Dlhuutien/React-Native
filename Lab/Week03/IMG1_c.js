@@ -5,7 +5,7 @@ import { Text, View, StyleSheet, Image, TouchableOpacity, TextInput} from 'react
 const YourApp = () => {
   return (
     <View style={{ flex: 1, backgroundColor:'#C7F4F6'}}>
-      <View style={{ flex: 3, justifyContent: 'center', alignItems: 'center' }}>
+      <View style={{ flex: 3, justifyCoSntent: 'center', alignItems: 'center' }}>
         <Text style={styles.header}>CODE</Text>
       </View>
 
