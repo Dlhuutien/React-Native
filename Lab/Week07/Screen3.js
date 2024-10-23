@@ -12,38 +12,57 @@ import {
 export default Screen3 = (props) => {
   const { navigation, route } = props;
   const { navigate, goBack } = navigation;
-  const { name } = route.params;
-  const [addText, setAddText] = useState('');
-
-  const url = 'https://670b39d4ac6860a6c2cb73c4.mockapi.io/discription';
+  const { name, id, title } = route.params; // Nhận cả id và title nếu là edit
+  const [addText, setAddText] = useState(title || ''); // Nếu có title thì set là title, nếu không thì là rỗng
   const [data, setData] = useState({ title: '' });
 
-  const addData = async () => {
-  if (!addText.trim()) {
-    Alert.alert('Error', 'Không được để trống');
-    return;
-  }
+  const url = 'https://670b39d4ac6860a6c2cb73c4.mockapi.io/discription';
 
-  try {
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
-
-    if (response.ok) {
-      Alert.alert('Thành công', 'Thêm thành công');
-      navigation.goBack();
-    } else {
-      Alert.alert('Lỗi', 'Không thể thêm job');
+  const addOrEditData = async () => {
+    if (!addText.trim()) {
+      Alert.alert('Error', 'Không được để trống');
+      return;
     }
-  } catch (error) {
-    console.error('Lỗi khi thêm job:', error);
-    Alert.alert('Lỗi', 'Không thể thêm job');
-  }
-};
+
+    try {
+      if (id) {
+        // Nếu có id thì đây là chỉnh sửa
+        const response = await fetch(url.concat('/').concat(id), {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ title: addText }),
+        });
+
+        if (response.ok) {
+          Alert.alert('Thành công', 'Chỉnh sửa thành công');
+          navigation.goBack();
+        } else {
+          Alert.alert('Lỗi', 'Không thể chỉnh sửa job');
+        }
+      } else {
+        // Nếu không có id thì đây là thêm mới
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ title: addText }),
+        });
+
+        if (response.ok) {
+          Alert.alert('Thành công', 'Thêm thành công');
+          navigation.goBack();
+        } else {
+          Alert.alert('Lỗi', 'Không thể thêm job');
+        }
+      }
+    } catch (error) {
+      console.error('Lỗi khi thêm/chỉnh sửa job:', error);
+      Alert.alert('Lỗi', 'Không thể thêm/chỉnh sửa job');
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -62,14 +81,14 @@ export default Screen3 = (props) => {
       </View>
 
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text style={styles.title}>ADD YOUR JOB</Text>
+        <Text style={styles.title}>{id ? 'EDIT YOUR JOB' : 'ADD YOUR JOB'}</Text>
       </View>
 
       <View style={styles.inputContainer}>
         <Image source={require('./img/input.png')} style={styles.iconInput} />
         <TextInput
           style={styles.input}
-          placeholder="Input your job"
+          placeholder={id ? 'Edit your job' : 'Input your job'}
           onChangeText={(text) => {
             setAddText(text);
             setData({ ...data, title: text });
@@ -83,13 +102,14 @@ export default Screen3 = (props) => {
       </View>
 
       <View style={{ flex: 3, alignItems: 'center', justifyContent: 'center' }}>
-        <TouchableOpacity style={styles.button} onPress={addData}>
-          <Text style={styles.buttonText}>FINISH</Text>
+        <TouchableOpacity style={styles.button} onPress={addOrEditData}>
+          <Text style={styles.buttonText}>{id ? 'SAVE CHANGES' : 'FINISH'}</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
 };
+
 
 const styles = StyleSheet.create({
   icon: {

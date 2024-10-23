@@ -20,11 +20,6 @@ export default Screen2 = (props) => {
   const [searchText, setSearchText] = useState('');
 
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(null);
-  const [newTitle, setNewTitle] = useState('');
-
   const url = 'https://670b39d4ac6860a6c2cb73c4.mockapi.io/discription';
 
   useEffect(() => {
@@ -74,50 +69,29 @@ export default Screen2 = (props) => {
     );
   };
 */
-  const fnEdit = (id, newTitle) => {
-    fetch(url.concat('/').concat(id), {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ title: newTitle }),
-    })
-      .then((res) => res.json())
-      .then((updatedItem) => {
-        setData((prevData) =>
-          prevData.map((item) => (item.id === id ? updatedItem : item))
-        );
-        setModalVisible(false);
-        setSelectedItem(null);
-        setNewTitle('');
-      })
-      .catch((error) => console.error('Error:', error));
-  };
 
-  const openEditModal = (item) => {
-    setSelectedItem(item);
-    setNewTitle(item.title);
-    setModalVisible(true);
-  };
+const fnEdit = (id, title) => {
+  navigate('Screen3', { id, title, name });
+};
 
-  const Item = ({ title, id }) => (
-    <View style={styles.item}>
-      <Image source={require('./img/tick.png')} style={styles.iconInput} />
-      <Text style={{ flex: 1 }}>{title}</Text>
-      <View>
-        <TouchableOpacity style={styles.buttonItem} onPress={() => fnDel(id)}>
-          <Text style={styles.buttonText}>delete</Text>
-        </TouchableOpacity>
-      </View>
-      <View>
-        <TouchableOpacity
-          style={styles.buttonItem}
-          onPress={() => openEditModal({ id, title })}>
-          <Image source={require('./img/edit.png')} />
-        </TouchableOpacity>
-      </View>
+const Item = ({ title, id }) => (
+  <View style={styles.item}>
+    <Image source={require('./img/tick.png')} style={styles.iconInput} />
+    <Text style={{ flex: 1 }}>{title}</Text>
+    <View>
+      <TouchableOpacity style={styles.buttonItem} onPress={() => fnDel(id)}>
+        <Text style={styles.buttonText}>delete</Text>
+      </TouchableOpacity>
     </View>
-  );
+    <View>
+      <TouchableOpacity
+        style={styles.buttonItem}
+        onPress={() => fnEdit(id, title)}>
+        <Image source={require('./img/edit.png')} />
+      </TouchableOpacity>
+    </View>
+  </View>
+);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -159,36 +133,6 @@ export default Screen2 = (props) => {
         </TouchableOpacity>
       </View>
 
-      {selectedItem && (
-        <Modal visible={modalVisible} animationType="slide" transparent={true}>
-          <View style={styles.modalContainer}>
-            <View style={styles.modalView}>
-              <Text style={styles.modalTitle}>Edit Item</Text>
-              <TextInput
-                value={newTitle}
-                onChangeText={setNewTitle}
-                style={styles.modalInput}
-                placeholder="Edit title"
-              />
-              <View style={styles.modalButtons}>
-                <TouchableOpacity
-                  style={styles.modalButton}
-                  onPress={() => fnEdit(selectedItem.id, newTitle)}>
-                  <Text style={styles.buttonText}>Save</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.modalButton}
-                  onPress={() => {
-                    setModalVisible(false);
-                    setSelectedItem(null);
-                  }}>
-                  <Text style={styles.buttonText}>Cancel</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-        </Modal>
-      )}
     </SafeAreaView>
   );
 };
@@ -261,43 +205,5 @@ const styles = StyleSheet.create({
   },
   iconInput: {
     marginHorizontal: 10,
-  },
-
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.5)',
-  },
-  modalView: {
-    width: '80%',
-    backgroundColor: 'white',
-    padding: 20,
-    borderRadius: 10,
-    alignItems: 'center',
-  },
-  modalTitle: {
-    fontSize: 20,
-    marginBottom: 15,
-  },
-  modalInput: {
-    width: '100%',
-    padding: 10,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    borderRadius: 5,
-    marginBottom: 20,
-  },
-  modalButtons: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '100%',
-  },
-  modalButton: {
-    backgroundColor: '#00BDD6',
-    padding: 10,
-    borderRadius: 5,
-    width: '45%',
-    alignItems: 'center',
   },
 });
