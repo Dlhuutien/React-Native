@@ -7,13 +7,14 @@ import {
   TouchableOpacity,
   Image,
   TextInput,
+  Alert,
 } from 'react-native';
 
 export default Screen3 = (props) => {
   const { navigation, route } = props;
   const { navigate, goBack } = navigation;
   const { name, id, title } = route.params; // Nhận cả id và title nếu là edit
-  const [addText, setAddText] = useState(title || ''); // Nếu có title thì set là title, nếu không thì là rỗng
+  const [addText, setAddText] = useState(''); // Không cần hiển thị title khi edit
   const [data, setData] = useState({ title: '' });
 
   const url = 'https://670b39d4ac6860a6c2cb73c4.mockapi.io/discription';
@@ -26,7 +27,7 @@ export default Screen3 = (props) => {
 
     try {
       if (id) {
-        // Nếu có id thì đây là chỉnh sửa
+        // Nếu có id thì chỉnh sửa
         const response = await fetch(url.concat('/').concat(id), {
           method: 'PUT',
           headers: {
@@ -42,7 +43,7 @@ export default Screen3 = (props) => {
           Alert.alert('Lỗi', 'Không thể chỉnh sửa job');
         }
       } else {
-        // Nếu không có id thì đây là thêm mới
+        // Nếu không có id thì thêm mới
         const response = await fetch(url, {
           method: 'POST',
           headers: {
@@ -81,7 +82,9 @@ export default Screen3 = (props) => {
       </View>
 
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <Text style={styles.title}>{id ? 'EDIT YOUR JOB' : 'ADD YOUR JOB'}</Text>
+        <Text style={styles.title}>
+          {id ? 'EDIT YOUR JOB' : 'ADD YOUR JOB'}
+        </Text>
       </View>
 
       <View style={styles.inputContainer}>
@@ -103,13 +106,14 @@ export default Screen3 = (props) => {
 
       <View style={{ flex: 3, alignItems: 'center', justifyContent: 'center' }}>
         <TouchableOpacity style={styles.button} onPress={addOrEditData}>
-          <Text style={styles.buttonText}>{id ? 'SAVE CHANGES' : 'FINISH'}</Text>
+          <Text style={styles.buttonText}>
+            {id ? 'SAVE CHANGES' : 'FINISH'}
+          </Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
 };
-
 
 const styles = StyleSheet.create({
   icon: {
@@ -136,7 +140,6 @@ const styles = StyleSheet.create({
   buttonText: {
     color: 'white',
   },
-
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -158,7 +161,6 @@ const styles = StyleSheet.create({
     color: '#171A1F',
     marginLeft: 10,
   },
-
   inputContainer: {
     flex: 1,
     flexDirection: 'row',
